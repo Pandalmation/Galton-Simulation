@@ -4,7 +4,8 @@ import pymunk.pygame_util
 from pymunk.vec2d import Vec2d
 pymunk.pygame_util.positive_y_is_up = False
 
-RES = WIDTH, HEIGHT = 2900, 980
+#note: please change your laptop display settings to 100% if have not in order to experience this simulation
+RES = WIDTH, HEIGHT = 1600, 980
 # 1200,1000
 FPS = 60
 
@@ -16,6 +17,8 @@ draw_options = pymunk.pygame_util.DrawOptions(surface)
 space = pymunk.Space()
 space.gravity = 0, 8000
 ball_mass, ball_radius = 1, 7
+#for second balls
+ball_mass2, ball_radius2 = 1,7
 segment_thickness = 6
 split_thickness = 10
 split = WIDTH //2
@@ -29,9 +32,10 @@ L1, L2, L3, L4 = (x1, -100), (x1, y1), (x2, y2), (x2, y3)
 R1, R2, R3, R4 = (x4, -100), (x4, y1), (x3, y2), (x3, y3)
 B1, B2 = (0, HEIGHT), (split, HEIGHT)
 
-#galton funnel2 
-e, f, g, h = split + 10, 100, 18, 40
-x11, x22, x33, x44 = e, WIDTH+ split // 2 - g, WIDTH+ split // 2 + g, WIDTH+ split - e
+#galton funnel2 right side
+#f is height of the peg?
+e, f, g, h = split + 10, 100, 20, 40
+x11, x22, x33, x44 = e, WIDTH - split // 2 - g, WIDTH - split // 2 + g, WIDTH + split - e
 y11, y22, y33, y44, y55 = f, HEIGHT // 4 - h, HEIGHT // 4, HEIGHT // 2 - 1.5 * f, HEIGHT - 4 * f
 L11, L22, L33, L44 = (x11, -100), (x11, y11), (x22, y22), (x22, y33)
 R11, R22, R33, R44 = (x44, -100), (x44, y11), (x33, y22), (x33, y33)
@@ -53,6 +57,16 @@ def create_ball(space):
     space.add(ball_body, ball_shape)
     return ball_body
 
+def create_ball2(space):
+    ball_moment = pymunk.moment_for_circle(ball_mass2, 0, ball_radius2)
+    ball_body2 = pymunk.Body(ball_mass2, ball_moment)
+    ball_body2.position = randrange(x11, x44), randrange(-y11, y11)
+    ball_shape = pymunk.Circle(ball_body2, ball_radius2)
+    ball_shape.elasticity = 0.1
+    ball_shape.friction = 0.1
+    space.add(ball_body2, ball_shape)
+    return ball_body2
+
 
 def create_segment(from_, to_, thickness, space, color):
     segment_shape = pymunk.Segment(space.static_body, from_, to_, thickness)
@@ -69,9 +83,8 @@ def create_peg(x, y, space, color):
 
 #------call functions------
 # pegs
-peg_y, step = y4, 80
+peg_y, step = y4, 70
 #                 ^ y intervals
-x_step = 80
 for i in range(10):
     #           ^ range of y axis
     peg_x = -1.5 * step if i % 2 else -step
@@ -81,11 +94,11 @@ for i in range(10):
         if i == 9:
             create_segment((peg_x, peg_y + 50), (peg_x, HEIGHT), segment_thickness, space, 'darkslategray')
         peg_x += step
-    peg_y += 0.3 * step
+    peg_y += 0.5 * step
 
 
 #pegs & walls galton 2
-peg_y2, step = y44, 60
+peg_y2, step = y44, 50
 #                   ^y intervals
 for i in range(10):
     #           ^ range of y axis
@@ -123,7 +136,9 @@ create_segment(B11, B22, 20, space, 'darkslategray')
 create_segment(S1, S2, 9, space, 'red')
 
 # balls
-balls = [([randrange(256) for i in range(3)], create_ball(space)) for j in range(600)]
+balls = [([randrange(256) for i in range(4)], create_ball(space)) for j in range(400)]
+
+balls2 = [([randrange(256) for i in range(4)], create_ball2(space)) for j in range(800)]
 
 
 #---main loop---
@@ -139,7 +154,7 @@ while True:
 
     # [pygame.draw.circle(surface, color, ball.position, ball_radius) for color, ball in balls]
     [pygame.draw.circle(surface, color, (int(ball.position[0]), int(ball.position[1])),
-                    ball_radius) for color, ball in balls]
+                    ball_radius) for color, ball in balls2]
     
 
     [pygame.draw.circle(surface, color, (int(ball.position[0]), int(ball.position[1])),
