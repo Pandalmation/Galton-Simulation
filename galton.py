@@ -20,7 +20,6 @@ ball_mass, ball_radius = 1, 7
 #for second balls
 ball_mass2, ball_radius2 = 1,7
 segment_thickness = 6
-split_thickness = 10
 split = WIDTH //2
 
 # for variable proceed to label.png
@@ -101,7 +100,7 @@ for i in range(10):
 #pegs & walls galton 2
 peg_y2, step = y44, 50
 #                   ^y intervals
-for i in range(10):
+for i in range(13):
     #           ^ range of y axis
     peg_x2 = split + 0.5 * step if i % 2 else split+step
     for j in range(split // step + 2):
@@ -109,12 +108,13 @@ for i in range(10):
         create_peg(peg_x2, peg_y2, space, 'darkslateblue')
         if i == 9:
             #create wall
-            create_segment((peg_x2, peg_y2 + 50), (peg_x2, HEIGHT), segment_thickness, space, 'darkslategray')
+            create_segment((peg_x2, peg_y2 + step + 90), (peg_x2, HEIGHT), segment_thickness, space, 'darkslategray')
+            #                                     ^ wall height 
         peg_x2 += step
     peg_y2 += 0.5 * step
 
 
-#open label.png to view coord
+#open label.png to view coordinates
 
 # ball basket, the funnel #1
 platforms1 = (L1, L2), (L2, L3), (L3, L4), (R1, R2), (R2, R3), (R3, R4)
@@ -137,7 +137,7 @@ create_segment(S1, S2, 9, space, 'red')
 balls = [([randrange(256) for i in range(4)], create_ball(space)) for j in range(400)]
 
 balls2 = [([randrange(256) for i in range(4)], create_ball2(space)) for j in range(400)]
-
+#                                                                                    ^ balls amount
 
 #---main loop---
 while True:
