@@ -39,7 +39,7 @@ x11, x22, x33, x44 = e, WIDTH - split // 2 - g, WIDTH - split // 2 + g, WIDTH + 
 y11, y22, y33, y44, y55 = f, HEIGHT // 4 - h, HEIGHT // 4, HEIGHT // 2 - 1.5 * f, HEIGHT - 4 * f
 L11, L22, L33, L44 = (x11, -100), (x11, y11), (x22, y22), (x22, y33)
 R11, R22, R33, R44 = (x44, -100), (x44, y11), (x33, y22), (x33, y33)
-#base/floor
+#wall
 B11, B22 = (split, HEIGHT), (WIDTH, HEIGHT)
 #split wall
 S1, S2 = (split-2, 0), (split, HEIGHT)
@@ -92,6 +92,7 @@ for i in range(10):
         #           ^ range for x
         create_peg(peg_x, peg_y, space, 'darkslateblue')
         if i == 9:
+            #create wall
             create_segment((peg_x, peg_y + 50), (peg_x, HEIGHT), segment_thickness, space, 'darkslategray')
         peg_x += step
     peg_y += 0.5 * step
@@ -107,38 +108,35 @@ for i in range(10):
         #           ^ range for x axis
         create_peg(peg_x2, peg_y2, space, 'darkslateblue')
         if i == 9:
+            #create wall
             create_segment((peg_x2, peg_y2 + 50), (peg_x2, HEIGHT), segment_thickness, space, 'darkslategray')
         peg_x2 += step
     peg_y2 += 0.5 * step
 
 
-
 #open label.png to view coord
+
 # ball basket, the funnel #1
-platforms1 = (L1, L2), (L2, L3), (L3, L4), (R1, R2), (R2, R3), (R3, R4), (S1, S2)
+platforms1 = (L1, L2), (L2, L3), (L3, L4), (R1, R2), (R2, R3), (R3, R4)
 for platform1 in platforms1:
     create_segment(*platform1, segment_thickness, space, 'darkolivegreen')
     #floor
 create_segment(B1, B2, 20, space, 'darkslategray')
 
 # ball basket, the funnel #2
-platforms2 = (L11, L22), (L22, L33), (L33, L44), (R11, R22), (R22, R33), (R33, R44), (S1,S2)
+platforms2 = (L11, L22), (L22, L33), (L33, L44), (R11, R22), (R22, R33), (R33, R44)
 for platform2 in platforms2:
     create_segment(*platform2, segment_thickness, space, 'darkolivegreen')
     #floor
 create_segment(B11, B22, 20, space, 'darkslategray')
 
 #split wall
-# platforms3 = (S1, S2)
-# for platform3 in platforms3:
-#     create_segment(*platform3, split_thickness, space, 'red')
-#     #floor
 create_segment(S1, S2, 9, space, 'red')
 
 # balls
 balls = [([randrange(256) for i in range(4)], create_ball(space)) for j in range(400)]
 
-balls2 = [([randrange(256) for i in range(4)], create_ball2(space)) for j in range(800)]
+balls2 = [([randrange(256) for i in range(4)], create_ball2(space)) for j in range(400)]
 
 
 #---main loop---
@@ -151,6 +149,12 @@ while True:
 
     space.step(1 / FPS)
     space.debug_draw(draw_options)
+
+    if i.type == pygame.KEYDOWN:
+            if i.key == pygame.K_SPACE:
+                # Spacebar key was pressed
+                space.remove
+
 
     # [pygame.draw.circle(surface, color, ball.position, ball_radius) for color, ball in balls]
     [pygame.draw.circle(surface, color, (int(ball.position[0]), int(ball.position[1])),
