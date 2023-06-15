@@ -5,7 +5,7 @@ from pymunk.vec2d import Vec2d
 
 #initialize pygame and set up the display
 pygame.init()
-width, height = 1600, 880
+width, height = 1700, 880
 screen = pygame.display.set_mode((width, height))
 clock = pygame.time.Clock()
 draw_options = pymunk.pygame_util.DrawOptions(screen)
@@ -23,7 +23,9 @@ ball_mass2, ball_radius2 = 1,7
 
 #wall parameters
 segment_thickness = 6
-split = width//2
+split = width//2-100
+split2 = width-200
+overlay = 880
 
 #galton funnel
 a, b, c, d = 10, 100, 18, 40
@@ -34,15 +36,37 @@ R1, R2, R3, R4 = (x4, -100), (x4, y1), (x3, y2), (x3, y3)
 B1, B2 = (0, height), (split, height)
 
 #split wall
-S1, S2 = (split-2, 0), (split, height)
+S1, S2 = (split, 0), (split, height)
+S11,S22 = (split2,0), (split2,height)
 
 #galton funnel2
 e, f, g, h = split + 10, 100, 18, 40
-x11, x22, x33, x44 = e, width - split // 2 - g, width - split // 2 + g, width + split - e
+x11, x22, x33, x44 = e, split2 - split // 2 - g, split2 - split // 2 + g, split2+split - e
 y11, y22, y33, y44, y55 = f, height // 4 - h, height // 4, height // 2 - 1.5 * f, height - 4 * f
 L11, L22, L33, L44 = (x11, -100), (x11, y11), (x22, y22), (x22, y33)
 R11, R22, R33, R44 = (x44, -100), (x44, y11), (x33, y22), (x33, y33)
-B11, B22 = (split, height), (width, height)
+B11, B22 = (split, height), (split2, height)
+
+#button
+class Button:
+    def __init__(self, x, y, width, height, text):
+        self.rect = pygame.Rect(x, y, width, height)
+        self.text = text
+        self.font = pygame.font.Font(None, 50)
+        self.border_width = 2
+        self.border_color = (255, 255, 255)
+        self.button_color = (0, 0, 0)
+
+    def draw(self, surface):
+        pygame.draw.rect(surface, (255, 255, 255), self.rect)
+        text_surface = self.font.render(self.text, True, (0, 0, 0))
+        text_rect = text_surface.get_rect(center=self.rect.center)
+        surface.blit(text_surface, text_rect)
+
+    def is_clicked(self, pos):
+        return self.rect.collidepoint(pos)
+#               x,y coords x,y size  text on button
+button = Button(1520, 20, 170, 100, "Reset")
 
 #--------------------------------------
 
@@ -102,12 +126,12 @@ peg_y2, step = y44, 50
 for i in range(13):
     #           ^ range of y axis
     peg_x2 = split + 0.5 * step if i % 2 else split+step
-    for j in range(split // step + 2):
+    for j in range(690 // step + 2):
         #           ^ range for x axis
         create_peg(peg_x2, peg_y2, space, 'darkslateblue')
         if i == 9:
             #create wall
-            create_segment((peg_x2, peg_y2 + step + 90), (peg_x2, height    ), segment_thickness, space, 'darkslategray')
+            create_segment((peg_x2, peg_y2 + step + 90), (peg_x2, height), segment_thickness, space, 'darkslategray')
             #                                     ^ wall height 
         peg_x2 += step
     peg_y2 += 0.5 * step
@@ -123,6 +147,7 @@ create_segment(B1, B2, 20, space, 'darkslategray')
 
 #split wall
 create_segment(S1, S2, 9, space, 'red')
+create_segment(S11, S22, 9, space, 'yellow')
 
 # ball basket, the funnel #2
 platforms2 = (L11, L22), (L22, L33), (L33, L44), (R11, R22), (R22, R33), (R33, R44)
@@ -146,35 +171,36 @@ for _ in range(num_balls):
     balls2.append(ball)
 
 #game loop
-True
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             quit()
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            #balls1
-            #remove balls
-            for _ in range(num_balls):
-                ball = balls.pop()
-                space.remove(ball[0], ball[1])
-            #spawn balls
-            for _ in range(num_balls):
-                ball = create_ball(space)
-                balls.append(ball)
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            if button.is_clicked(pygame.mouse.get_pos()):
+                #balls1
+                #remove balls
+                for _ in range(num_balls):
+                    ball = balls.pop()
+                    space.remove(ball[0], ball[1])
+                #spawn balls
+                for _ in range(num_balls):
+                    ball = create_ball(space)
+                    balls.append(ball)
 
-            #balls2
-            #remove balls2
-            for _ in range(num_balls):
-                ball = balls2.pop()
-                space.remove(ball[0], ball[1])
-            #spawn balls2
-            for _ in range(num_balls):
-                ball = create_ball2(space)
-                balls2.append(ball)
+                #balls2
+                #remove balls2
+                for _ in range(num_balls):
+                    ball = balls2.pop()
+                    space.remove(ball[0], ball[1])
+                #spawn balls2
+                for _ in range(num_balls):
+                    ball = create_ball2(space)
+                    balls2.append(ball)
 
-    #ipdate physics and draw balls and floor
+    #update physics and draw balls and floor
     screen.fill((0, 0, 0))
     space.step(1 / 60.0)
     space.debug_draw(draw_options)
+    button.draw(screen)    # Draw the button on the screen
     pygame.display.flip()
     clock.tick(60)
