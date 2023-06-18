@@ -1,8 +1,8 @@
 # Galton-Simulation
 Computational Physics Final Project
 # Team-members
-- Daniel Phagandy
-- Filbert Federico
+- Benedictus Filbert Federico
+- Eric Daniel Phagandy
 - Jocelin Wilson
 - Tiffany Widjaja
 # Folders-Guide
