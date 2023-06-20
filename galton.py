@@ -62,13 +62,13 @@ def create_peg(x, y, space, color):
 #pegs & walls
 peg_y, step = y4, 70
 #                 ^ y intervals
-for i in range(10):
+for i in range(11):
     #           ^ range of y axis
-    peg_x = -1.5 * step if i % 2 else -step
+    peg_x = -1.6 * step if i % 2 else -step-7
     for j in range(split // step + 2):
         #           ^ range for x
         create_peg(peg_x, peg_y, space, 'darkslateblue')
-        if i == 9:
+        if i == 10:
             #create wall
             create_segment((peg_x, peg_y + 50), (peg_x, height), segment_thickness, space, 'darkslategray')
         peg_x += step
@@ -100,8 +100,8 @@ for platform1 in platforms1:
 create_segment(B1, B2, 20, space, 'darkslategray')
 
 #split wall
-create_segment(S1, S2, 9, space, 'black')
-create_segment(S11, S22, 9, space, 'black')
+create_segment(S1, S2, 10, space, 'black')
+create_segment(S11, S22, 10, space, 'black')
 
 # ball basket, the funnel #2
 platforms2 = (L11, L22), (L22, L33), (L33, L44), (R11, R22), (R22, R33), (R33, R44)
