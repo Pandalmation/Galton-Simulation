@@ -70,7 +70,7 @@ for i in range(10):
         create_peg(peg_x, peg_y, space, 'darkslateblue')
         if i == 8:
             #create wall
-            create_segment((peg_x, peg_y + 80), (peg_x, height), segment_thickness, space, 'darkslategray')
+            create_segment((peg_x, peg_y + 95), (peg_x, height), segment_thickness, space, 'darkslategray')
         peg_x += step
     peg_y += 0.5 * step
 
@@ -86,7 +86,7 @@ for i in range(13):
         if i == 9:
             #create wall
             create_segment((peg_x2, peg_y2 + step + 90), (peg_x2, height), segment_thickness, space, 'darkslategray')
-            #                                     ^ wall height 
+            #                                       ^ wall height 
         peg_x2 += step
     peg_y2 += 0.5 * step
 
