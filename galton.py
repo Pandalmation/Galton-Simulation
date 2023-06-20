@@ -60,17 +60,17 @@ def create_peg(x, y, space, color):
     space.add(circle_shape)
     
 #pegs & walls
-peg_y, step = y4, 70
+peg_y, step = y4, 68
 #                 ^ y intervals
-for i in range(11):
+for i in range(10):
     #           ^ range of y axis
-    peg_x = -1.6 * step if i % 2 else -step-7
+    peg_x = -1.5 * step if i % 2 else -step
     for j in range(split // step + 2):
         #           ^ range for x
         create_peg(peg_x, peg_y, space, 'darkslateblue')
-        if i == 10:
+        if i == 8:
             #create wall
-            create_segment((peg_x, peg_y + 50), (peg_x, height), segment_thickness, space, 'darkslategray')
+            create_segment((peg_x, peg_y + 80), (peg_x, height), segment_thickness, space, 'darkslategray')
         peg_x += step
     peg_y += 0.5 * step
 
@@ -92,7 +92,7 @@ for i in range(13):
 
 #open label.png to view coordinates
 
-#ball basket, the funnel #1
+#ball floor, the funnel #1
 platforms1 = (L1, L2), (L2, L3), (L3, L4), (R1, R2), (R2, R3), (R3, R4)
 for platform1 in platforms1:
     create_segment(*platform1, segment_thickness, space, 'darkolivegreen')
@@ -103,7 +103,7 @@ create_segment(B1, B2, 20, space, 'darkslategray')
 create_segment(S1, S2, 10, space, 'black')
 create_segment(S11, S22, 10, space, 'black')
 
-# ball basket, the funnel #2
+# ball floor, the funnel #2
 platforms2 = (L11, L22), (L22, L33), (L33, L44), (R11, R22), (R22, R33), (R33, R44)
 for platform2 in platforms2:
     create_segment(*platform2, segment_thickness, space, 'darkolivegreen')
@@ -215,16 +215,16 @@ def decrease_mass():
 #edit radius
 def increase_radius():
     global ball_radius, ball_radius2
-    ball_radius += 1
-    ball_radius2 += 1
+    ball_radius += 0.25
+    ball_radius2 += 0.25
     restart()
     print(f"ball_radius(+):{ball_radius}")
 
 def decrease_radius():
     global ball_radius, ball_radius2
-    if ball_radius > 1 and ball_radius2 > 1:
-        ball_radius -= 1
-        ball_radius2 -= 1
+    if ball_radius > 0 and ball_radius2 > 0:
+        ball_radius -= 0.25
+        ball_radius2 -= 0.25
     restart()
     print(f"ball_radius(-):{ball_radius}")
 
