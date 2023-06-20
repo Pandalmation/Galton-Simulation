@@ -2,7 +2,7 @@
 Computational Physics Final Project
 # Team-members
 - Benedictus Filbert Federico
-- Eric Daniel Phagandy
+- Daniel Eric Phagandy
 - Jocelin Wilson
 - Tiffany Widjaja
 # Folders-Guide
