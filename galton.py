@@ -11,7 +11,7 @@ draw_options = pymunk.pygame_util.DrawOptions(screen)
 
 #initialize pymunk space and set gravity
 space = pymunk.Space()
-space.gravity = 0, 8000
+space.gravity = 0, 9810
 
 #balls parameters
 num_balls = 350
@@ -248,6 +248,7 @@ def create_ball(space):
     body.position = randrange(x1, x4), randrange(-y1, y1)
     shape = pymunk.Circle(body, ball_radius)
     shape.elasticity = 0.1
+    shape.friction = 0.1
     space.add(body, shape)
     return body, shape
 
@@ -265,6 +266,7 @@ def create_ball2(space):
     body.position = randrange(x11, x44), randrange(-y11, y11)
     shape = pymunk.Circle(body, ball_radius)
     shape.elasticity = 0.1
+    shape.friction = 0.1
     space.add(body, shape)
     return body, shape
 
